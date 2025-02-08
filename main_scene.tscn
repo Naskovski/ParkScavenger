@@ -1,0 +1,196 @@
+[gd_scene load_steps=16 format=3 uid="uid://jahogy1fboyq"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_qcp7f"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_wmboh"]
+size = Vector3(50, 0.5, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_phvl0"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n3vv5"]
+size = Vector3(50, 0.5, 50)
+
+[sub_resource type="Shader" id="Shader_rxgp7"]
+code = "
+// NOTE: Shader automatically converted from Godot Engine 4.3.stable's ProceduralSkyMaterial.
+
+shader_type sky;
+render_mode use_debanding;
+
+uniform vec4 sky_top_color : source_color = vec4(0.385, 0.454, 0.55, 1.0);
+uniform vec4 sky_horizon_color : source_color = vec4(0.646, 0.656, 0.67, 1.0);
+uniform float sky_curve : hint_range(0, 1) = 0.15;
+uniform float sky_energy = 1.0; // In Lux.
+uniform sampler2D sky_cover : filter_linear, source_color, hint_default_black;
+uniform vec4 sky_cover_modulate : source_color = vec4(1.0, 1.0, 1.0, 1.0);
+uniform vec4 ground_bottom_color : source_color = vec4(0.2, 0.169, 0.133, 1.0);
+uniform vec4 ground_horizon_color : source_color = vec4(0.646, 0.656, 0.67, 1.0);
+uniform float ground_curve : hint_range(0, 1) = 0.02;
+uniform float ground_energy = 1.0;
+uniform float sun_angle_max = 30.0;
+uniform float sun_curve : hint_range(0, 1) = 0.15;
+uniform float exposure : hint_range(0, 128) = 1.0;
+
+uniform sampler2D cloudTexture;
+uniform sampler2D cloudTexture2;
+
+uniform vec2 cloudDirection;
+uniform vec2 cloudDirection2;
+uniform vec2 cloudScale;
+uniform float cloudDistance;
+uniform float cloudSpeed;
+uniform float cloudSpeed2; 
+
+
+void sky() {
+	float v_angle = acos(clamp(EYEDIR.y, -1.0, 1.0));
+	float c = (1.0 - v_angle / (PI * 0.5));
+	vec3 sky = mix(sky_horizon_color.rgb, sky_top_color.rgb, clamp(1.0 - pow(1.0 - c, 1.0 / sky_curve), 0.0, 1.0));
+	sky *= sky_energy;
+
+	if (LIGHT0_ENABLED) {
+		float sun_angle = acos(dot(LIGHT0_DIRECTION, EYEDIR));
+		if (sun_angle < LIGHT0_SIZE) {
+			sky = LIGHT0_COLOR * LIGHT0_ENERGY;
+		} else if (sun_angle < sun_angle_max) {
+			float c2 = (sun_angle - LIGHT0_SIZE) / (sun_angle_max - LIGHT0_SIZE);
+			sky = mix(LIGHT0_COLOR * LIGHT0_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
+		}
+	}
+
+	if (LIGHT1_ENABLED) {
+		float sun_angle = acos(dot(LIGHT1_DIRECTION, EYEDIR));
+		if (sun_angle < LIGHT1_SIZE) {
+			sky = LIGHT1_COLOR * LIGHT1_ENERGY;
+		} else if (sun_angle < sun_angle_max) {
+			float c2 = (sun_angle - LIGHT1_SIZE) / (sun_angle_max - LIGHT1_SIZE);
+			sky = mix(LIGHT1_COLOR * LIGHT1_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
+		}
+	}
+
+	if (LIGHT2_ENABLED) {
+		float sun_angle = acos(dot(LIGHT2_DIRECTION, EYEDIR));
+		if (sun_angle < LIGHT2_SIZE) {
+			sky = LIGHT2_COLOR * LIGHT2_ENERGY;
+		} else if (sun_angle < sun_angle_max) {
+			float c2 = (sun_angle - LIGHT2_SIZE) / (sun_angle_max - LIGHT2_SIZE);
+			sky = mix(LIGHT2_COLOR * LIGHT2_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
+		}
+	}
+
+	if (LIGHT3_ENABLED) {
+		float sun_angle = acos(dot(LIGHT3_DIRECTION, EYEDIR));
+		if (sun_angle < LIGHT3_SIZE) {
+			sky = LIGHT3_COLOR * LIGHT3_ENERGY;
+		} else if (sun_angle < sun_angle_max) {
+			float c2 = (sun_angle - LIGHT3_SIZE) / (sun_angle_max - LIGHT3_SIZE);
+			sky = mix(LIGHT3_COLOR * LIGHT3_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
+		}
+	}
+
+	vec4 sky_cover_texture = texture(sky_cover, SKY_COORDS);
+	sky += (sky_cover_texture.rgb * sky_cover_modulate.rgb) * sky_cover_texture.a * sky_cover_modulate.a * sky_energy;
+
+	c = (v_angle - (PI * 0.5)) / (PI * 0.5);
+	vec3 ground = mix(ground_horizon_color.rgb, ground_bottom_color.rgb, clamp(1.0 - pow(1.0 - c, 1.0 / ground_curve), 0.0, 1.0));
+	ground *= ground_energy;
+
+	vec2 skyUV = EYEDIR.xz / EYEDIR.y;
+	vec3 clouds = texture(cloudTexture, skyUV * cloudScale + TIME * cloudDirection * cloudSpeed).rgb - texture(cloudTexture2, skyUV * cloudScale + TIME * cloudDirection2 * cloudSpeed2).rgb;
+	clouds = clouds - smoothstep(0.0, EYEDIR.y, cloudDistance);
+	clouds = clamp(clouds,0.0,1.0);
+	sky += clouds;
+
+	COLOR = mix(ground, sky, step(0.0, EYEDIR.y)) * exposure;
+}
+"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_alh8w"]
+seed = 1
+frequency = 0.0044
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ikyv0"]
+width = 1024
+height = 1024
+seamless = true
+noise = SubResource("FastNoiseLite_alh8w")
+
+[sub_resource type="Gradient" id="Gradient_llh2q"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_7t2kp"]
+frequency = 0.0028
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2yq2t"]
+width = 1024
+height = 1024
+color_ramp = SubResource("Gradient_llh2q")
+noise = SubResource("FastNoiseLite_7t2kp")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v10ak"]
+shader = SubResource("Shader_rxgp7")
+shader_parameter/sky_top_color = Color(0.116425, 0.417351, 0.952816, 1)
+shader_parameter/sky_horizon_color = Color(0.758673, 0.883701, 0.859864, 1)
+shader_parameter/sky_curve = 0.15
+shader_parameter/sky_energy = 1.0
+shader_parameter/sky_cover_modulate = Color(1, 1, 1, 1)
+shader_parameter/ground_bottom_color = Color(0.214975, 0.165827, 0.0899309, 1)
+shader_parameter/ground_horizon_color = Color(0.6463, 0.6558, 0.6708, 1)
+shader_parameter/ground_curve = 0.02
+shader_parameter/ground_energy = 1.0
+shader_parameter/sun_angle_max = 0.523599
+shader_parameter/sun_curve = 0.15
+shader_parameter/exposure = 1.0
+shader_parameter/cloudDirection = Vector2(1, -1)
+shader_parameter/cloudDirection2 = Vector2(-1, 1)
+shader_parameter/cloudScale = Vector2(0.1, 0.1)
+shader_parameter/cloudDistance = 0.0
+shader_parameter/cloudSpeed = 0.005
+shader_parameter/cloudSpeed2 = 0.01
+shader_parameter/cloudTexture = SubResource("NoiseTexture2D_ikyv0")
+shader_parameter/cloudTexture2 = SubResource("NoiseTexture2D_2yq2t")
+
+[sub_resource type="Sky" id="Sky_dhsdg"]
+sky_material = SubResource("ShaderMaterial_v10ak")
+
+[sub_resource type="Environment" id="Environment_4jtla"]
+background_mode = 2
+sky = SubResource("Sky_dhsdg")
+sky_custom_fov = 40.9
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_gj7x7"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gj2ih"]
+
+[node name="MainScene" type="Node3D"]
+
+[node name="Ground" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("BoxMesh_wmboh")
+surface_material_override/0 = SubResource("StandardMaterial3D_phvl0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_n3vv5")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_4jtla")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.312269, 0.949994, 0, -0.949994, 0.312269, -4.13624, 15.7608, -1.34584)
+directional_shadow_split_1 = 0.186
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.0978088, 0.995205, 0, -0.995205, -0.0978088, 0, 3.43944, 0)
+script = ExtResource("1_qcp7f")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_gj7x7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_gj2ih")
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, -0.0697565, -0.997564, 0, 0.997564, -0.0697565, 0, -4, 2)
+fov = 120.2
