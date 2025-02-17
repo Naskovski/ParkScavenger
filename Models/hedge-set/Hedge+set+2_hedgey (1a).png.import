@@ -1,0 +1,38 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://6tfjseoksvkm"
+path.s3tc="res://.godot/imported/Hedge+set+2_hedgey (1a).png-973f6555754860951a28b1bc79fddc31.s3tc.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "e2ffb4a60dc04bc7eed8dd89e1f6830f"
+}
+
+[deps]
+
+source_file="res://Models/hedge-set/Hedge+set+2_hedgey (1a).png"
+dest_files=["res://.godot/imported/Hedge+set+2_hedgey (1a).png-973f6555754860951a28b1bc79fddc31.s3tc.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0
