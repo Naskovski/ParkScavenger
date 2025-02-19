@@ -66,11 +66,11 @@ vertical_alignment = 1
 
 [node name="StartButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-text = "Play Again!"
+text = "Играј повторно!"
 
 [node name="ExitButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-text = "Exit"
+text = "Затвори"
 
 [connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]

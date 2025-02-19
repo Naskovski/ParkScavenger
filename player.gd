@@ -5,15 +5,27 @@ extends CharacterBody3D
 @export var JUMP_VELOCITY := 4.5
 @export var ROTATION_SPEED := 2.0
 @export var WALK_THRESHOLD := 0.5  
+@export var MOUSE_SENSITIVITY := 0.002  # Sensitivity for mouse movement
 
 @onready var camera = $Camera3D
 @onready var animation_player = $AnimationPlayer
 
 var gravity = ProjectSettings.get("physics/3d/default_gravity")
+var camera_rotation: Vector2 = Vector2.ZERO 
 
 func _ready():
 	add_to_group("player")
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED) 
 
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		rotate_y(-event.relative.x * MOUSE_SENSITIVITY)
+		camera_rotation.x += event.relative.y * MOUSE_SENSITIVITY
+		camera_rotation.x = clamp(camera_rotation.x, -1.5, -1.15) 
+		camera.rotation.x = camera_rotation.x
+		
+	if event.is_action_pressed("ui_cancel"):  
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():

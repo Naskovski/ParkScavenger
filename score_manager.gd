@@ -13,6 +13,7 @@ func add_score(points: int):
 		ui.update_score(score)
 		
 	if score == 5:
+		TimerManager.remove_ui()
 		get_tree().change_scene_to_file("res://game_over.tscn")
 		
 func reset():

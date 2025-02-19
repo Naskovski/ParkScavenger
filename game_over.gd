@@ -3,13 +3,15 @@ var main_scene = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE) 
+	
 	if ScoreManager.score == 5:
-		$VBoxContainer/TitleLabel.text = "You won!"
+		$VBoxContainer/TitleLabel.text = "Победивте!"
 		$VBoxContainer/SubtitleLabel.text = ""
 	else:
-		$VBoxContainer/TitleLabel.text = "You lost!"
-		$VBoxContainer/SubtitleLabel.text = "The time has ran out"
-		
+		$VBoxContainer/TitleLabel.text = "Играј повторно!"
+		$VBoxContainer/SubtitleLabel.text = "Ви истече времето"
+	
 	ResourceLoader.load_threaded_request("res://main_scene.tscn")
 	
 
@@ -20,7 +22,7 @@ func _on_start_button_pressed() -> void:
 		main_scene = load("res://main_scene.tscn")
 
 	ScoreManager.reset()
-	
+	TimerManager.reset_timer()
 	get_tree().change_scene_to_packed(main_scene)
 	
 	

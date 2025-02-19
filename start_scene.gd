@@ -11,6 +11,7 @@ func _on_start_button_pressed() -> void:
 	else:
 		main_scene = load("res://main_scene.tscn")
 	
+	TimerManager.reset_timer()
 	get_tree().change_scene_to_packed(main_scene)
 
 func _on_exit_button_pressed() -> void:
