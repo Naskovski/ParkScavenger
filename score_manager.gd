@@ -11,3 +11,9 @@ func add_score(points: int):
 	score += points
 	if ui:
 		ui.update_score(score)
+		
+	if score == 5:
+		get_tree().change_scene_to_file("res://game_over.tscn")
+		
+func reset():
+	score = 0;

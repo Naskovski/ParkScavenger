@@ -11,13 +11,14 @@ config_version=5
 [application]
 
 config/name="ParkExplorer"
-run/main_scene="res://main_scene.tscn"
+run/main_scene="res://start_scene.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
 ScoreManager="*res://score_manager.gd"
+TimerControl="*res://timer_control.gd"
 
 [input]
 

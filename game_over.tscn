@@ -1,0 +1,76 @@
+[gd_scene load_steps=6 format=3 uid="uid://dbxjo23kdhjot"]
+
+[ext_resource type="Script" path="res://game_over.gd" id="1_a8rbj"]
+
+[sub_resource type="SystemFont" id="SystemFont_w7tyx"]
+font_names = PackedStringArray("Fantasy")
+
+[sub_resource type="LabelSettings" id="LabelSettings_swnwm"]
+font = SubResource("SystemFont_w7tyx")
+font_size = 100
+font_color = Color(1, 1, 0.184314, 1)
+shadow_size = 20
+shadow_color = Color(0.111197, 0.111197, 0.111197, 0.635294)
+shadow_offset = Vector2(5, 5)
+
+[sub_resource type="SystemFont" id="SystemFont_urog7"]
+font_names = PackedStringArray("Fantasy")
+
+[sub_resource type="LabelSettings" id="LabelSettings_5rbn7"]
+font = SubResource("SystemFont_urog7")
+font_size = 30
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_a8rbj")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -259.0
+offset_top = -235.0
+offset_right = 259.0
+offset_bottom = 235.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.345098, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 70
+text = "You Lost!"
+label_settings = SubResource("LabelSettings_swnwm")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.345098, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 70
+text = "The time has ran out"
+label_settings = SubResource("LabelSettings_5rbn7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Play Again!"
+
+[node name="ExitButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Exit"
+
+[connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]

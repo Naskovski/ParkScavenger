@@ -1,0 +1,76 @@
+[gd_scene load_steps=5 format=3 uid="uid://kbpwyxwd75ce"]
+
+[ext_resource type="Script" path="res://start_scene.gd" id="1_wd1bm"]
+[ext_resource type="Texture2D" uid="uid://c7tic8rcg4xv7" path="res://Textures/start-bg.png" id="2_mg4wk"]
+
+[sub_resource type="SystemFont" id="SystemFont_wpo34"]
+font_names = PackedStringArray("Fantasy")
+
+[sub_resource type="LabelSettings" id="LabelSettings_8ubjm"]
+font = SubResource("SystemFont_wpo34")
+font_size = 100
+font_color = Color(1, 1, 0.184314, 1)
+shadow_size = 20
+shadow_color = Color(0.111197, 0.111197, 0.111197, 0.635294)
+shadow_offset = Vector2(5, 5)
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wd1bm")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_mg4wk")
+expand_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -259.0
+offset_top = -235.0
+offset_right = 259.0
+offset_bottom = 235.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.345098, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 70
+text = "Park Scavenger"
+label_settings = SubResource("LabelSettings_8ubjm")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Play"
+
+[node name="ExitButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Exit"
+
+[node name="Label2" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.439216)
+text = "Filip Naskovski - 211198"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]

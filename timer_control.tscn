@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://dfhqn0s80068c"]
+
+[ext_resource type="Script" path="res://timer_control.gd" id="1_2bmpg"]
+
+[node name="TimerControl" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_2bmpg")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 100.0
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
